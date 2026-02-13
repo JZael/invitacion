@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invitación Especial</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    overflow:hidden;
+    height:100vh;
+    font-family:'Playfair Display',serif;
+    background:linear-gradient(to bottom,#7b1fa2,#2a003f);
+    color:white;
+}
+
+/* PANTALLAS */
+.pantalla{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    transition:opacity 1.5s ease;
+}
+
+.oculto{
+    opacity:0;
+    pointer-events:none;
+}
+
+/* BOTONES */
+button{
+    margin-top:40px;
+    padding:15px 40px;
+    background:transparent;
+    border:2px solid white;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+    transition:0.3s;
+}
+
+button:hover{
+    background:white;
+    color:#7b1fa2;
+}
+
+/* PARTÍCULAS */
+.particula{
+    position:absolute;
+    width:6px;
+    height:6px;
+    background:white;
+    border-radius:50%;
+    opacity:0.7;
+    animation:caer linear infinite;
+}
+
+/* CORAZONES NEÓN */
+.corazon{
+    position:absolute;
+    font-size:24px;
+    color:white;
+    text-shadow:
+        0 0 5px #ff8cf0,
+        0 0 15px #d946ef,
+        0 0 30px #a21caf;
+    animation:caer linear infinite;
+}
+
+@keyframes caer{
+    from{transform:translateY(-10vh);}
+    to{transform:translateY(110vh);}
+}
+
+/* TEXTO DELIRIO */
+.delirio{
+    font-family:'Great Vibes',cursive;
+    font-size:42px;
+    margin-top:40px;
+    opacity:0;
+    text-align:center;
+    text-shadow:
+        0 0 5px #ff8cf0,
+        0 0 15px #d946ef,
+        0 0 30px #a21caf;
+    transition:opacity 2s ease;
+}
+
+/* CARTA */
+.carta-contenedor{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.rodillo{
+    width:80%;
+    max-width:600px;
+    height:20px;
+    background:#c8a97e;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.4);
+}
+
+.carta{
+    width:80%;
+    max-width:600px;
+    background:#f5e6cc;
+    color:#3b2a1a;
+    overflow:hidden;
+    max-height:0;
+    padding:0 20px;
+    transition:max-height 2.5s ease,padding 1s ease;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+.carta.activa{
+    max-height:800px;
+    padding:20px;
+}
+</style>
+</head>
+<body>
+
+<!-- PANTALLA 1 -->
+<div class="pantalla" id="pantalla1">
+    <h1>Con mucho amor te hago presente esta invitación</h1>
+    <button id="btnInicio">Presióname</button>
+</div>
+
+<!-- PANTALLA 2 -->
+<div class="pantalla oculto" id="pantalla2">
+    <div class="delirio">Unos corazones para ti que eres mi delirio</div>
+    <button id="btnLeer" style="display:none;">Leer invitación</button>
+</div>
+
+<!-- PANTALLA 3 -->
+<div class="pantalla oculto" id="pantalla3">
+    <div class="carta-contenedor">
+        <div class="rodillo"></div>
+        <div class="carta" id="carta">
+            <p>
+            Mi amor...<br><br>
+            Esta no es solo una invitación, es un pequeño universo creado para ti.<br><br>
+            Quiero invitarte a compartir un momento especial,
+            donde cada segundo sea un recuerdo hermoso.
+            </p>
+        </div>
+        <div class="rodillo"></div>
+    </div>
+</div>
+
+<audio id="musica" preload="auto">
+  <source src="musica.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+/* PARTÍCULAS */
+for(let i=0;i<40;i++){
+    const p=document.createElement("div");
+    p.className="particula";
+    p.style.left=Math.random()*100+"vw";
+    p.style.animationDuration=(5+Math.random()*5)+"s";
+    document.body.appendChild(p);
+}
+
+const pantalla1=document.getElementById("pantalla1");
+const pantalla2=document.getElementById("pantalla2");
+const pantalla3=document.getElementById("pantalla3");
+const musica=document.getElementById("musica");
+
+document.getElementById("btnInicio").addEventListener("click", function(){
+
+    musica.currentTime = 0;
+    musica.play().catch(()=>{});
+
+    pantalla1.classList.add("oculto");
+
+    setTimeout(()=>{
+        pantalla2.classList.remove("oculto");
+        generarCorazones();
+    },1200);
+});
+
+/* GENERAR SOLO CORAZONES */
+function generarCorazones(){
+    for(let i=0;i<35;i++){
+        const c=document.createElement("div");
+        c.className="corazon";
+        c.innerHTML="❤";
+        c.style.left=Math.random()*100+"vw";
+        c.style.animationDuration=(4+Math.random()*4)+"s";
+        c.style.fontSize=(20+Math.random()*25)+"px";
+        document.body.appendChild(c);
+    }
+
+    setTimeout(()=>{
+        document.querySelector(".delirio").style.opacity="1";
+    },2000);
+
+    setTimeout(()=>{
+        document.getElementById("btnLeer").style.display="block";
+    },3500);
+}
+
+document.getElementById("btnLeer").addEventListener("click", function(){
+
+    pantalla2.classList.add("oculto");
+
+    setTimeout(()=>{
+        pantalla3.classList.remove("oculto");
+
+        setTimeout(()=>{
+            document.getElementById("carta").classList.add("activa");
+        },300);
+
+    },1200);
+});
+
+</script>
+
+</body>
+</html>
