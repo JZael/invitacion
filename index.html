@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invitación</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    overflow:hidden;
+    height:100vh;
+    font-family:'Playfair Display',serif;
+    background:linear-gradient(to bottom,#7b1fa2,#2a003f);
+    color:white;
+}
+
+/* PANTALLAS */
+.pantalla{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    transition:opacity 1.5s ease;
+}
+
+/* BOTONES */
+button{
+    margin-top:40px;
+    padding:15px 40px;
+    background:transparent;
+    border:2px solid white;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+/* PARTÍCULAS */
+.particula{
+    position:absolute;
+    width:6px;
+    height:6px;
+    background:white;
+    border-radius:50%;
+    opacity:0.7;
+    animation:caer linear infinite;
+}
+
+@keyframes caer{
+    from{transform:translateY(-10px);}
+    to{transform:translateY(100vh);}
+}
+
+/* LIRIOS */
+#lirios{
+    display:flex;
+    gap:40px;
+    align-items:flex-end;
+}
+
+.lirio{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.tallo{
+    width:6px;
+    height:120px;
+    background:#c084fc;
+    box-shadow:0 0 10px #a855f7;
+}
+
+.flor{
+    width:60px;
+    height:80px;
+    background:white;
+    border:3px solid #b57aff;
+    border-radius:50% 50% 40% 40%;
+    box-shadow:
+        0 0 10px #c084fc,
+        0 0 25px #a855f7,
+        0 0 50px #9333ea;
+    transform:scaleY(0);
+    transform-origin:bottom;
+    opacity:0;
+    transition:transform 2.5s ease, opacity 2s;
+}
+
+/* TEXTO DELIRIO */
+.delirio{
+    font-family:'Great Vibes',cursive;
+    font-size:38px;
+    margin-top:40px;
+    opacity:0;
+    text-shadow:
+        0 0 5px #c084fc,
+        0 0 15px #a855f7,
+        0 0 30px #9333ea;
+    transition:opacity 2s ease;
+}
+
+/* CARTA */
+.carta-contenedor{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.rodillo{
+    width:80%;
+    max-width:600px;
+    height:20px;
+    background:#c8a97e;
+    border-radius:10px;
+}
+
+.carta{
+    width:80%;
+    max-width:600px;
+    background:#f5e6cc;
+    color:#3b2a1a;
+    overflow:hidden;
+    max-height:0;
+    padding:0 20px;
+    transition:max-height 2.5s ease,padding 1s ease;
+    text-align:center;
+}
+
+.carta.activa{
+    max-height:800px;
+    padding:20px;
+}
+
+.oculto{
+    opacity:0;
+    pointer-events:none;
+}
+</style>
+</head>
+<body>
+
+<!-- PANTALLA 1 -->
+<div class="pantalla" id="pantalla1">
+    <h1 style="text-align:center;">Con mucho amor te hago presente esta invitación</h1>
+    <button id="btnInicio">Presióname</button>
+</div>
+
+<!-- PANTALLA 2 -->
+<div class="pantalla oculto" id="pantalla2">
+    <div id="lirios"></div>
+    <div class="delirio">Unos lirios para ti que eres mi delirio</div>
+    <button id="btnLeer" style="display:none;">Leer invitación</button>
+</div>
+
+<!-- PANTALLA 3 -->
+<div class="pantalla oculto" id="pantalla3">
+    <div class="carta-contenedor">
+        <div class="rodillo"></div>
+        <div class="carta" id="carta">
+            <p>
+            Mi amor...  
+            Esta no es solo una invitación, es un pequeño universo creado para ti.
+            Quiero invitarte a compartir un momento especial,
+            donde cada segundo sea un recuerdo hermoso.
+            </p>
+        </div>
+        <div class="rodillo"></div>
+    </div>
+</div>
+
+<audio id="musica" src="musica.mp3"></audio>
+
+<script>
+
+/* PARTÍCULAS */
+for(let i=0;i<50;i++){
+    const p=document.createElement("div");
+    p.className="particula";
+    p.style.left=Math.random()*100+"vw";
+    p.style.animationDuration=(5+Math.random()*5)+"s";
+    p.style.opacity=Math.random();
+    document.body.appendChild(p);
+}
+
+/* TRANSICIONES */
+const pantalla1=document.getElementById("pantalla1");
+const pantalla2=document.getElementById("pantalla2");
+const pantalla3=document.getElementById("pantalla3");
+const musica=document.getElementById("musica");
+
+document.getElementById("btnInicio").addEventListener("click",()=>{
+
+    musica.play().catch(()=>{});
+
+    pantalla1.classList.add("oculto");
+
+    setTimeout(()=>{
+        pantalla2.classList.remove("oculto");
+        crearLirios();
+    },1200);
+});
+
+function crearLirios(){
+    const contenedor=document.getElementById("lirios");
+
+    for(let i=0;i<5;i++){
+        const lirio=document.createElement("div");
+        lirio.className="lirio";
+
+        const flor=document.createElement("div");
+        flor.className="flor";
+
+        const tallo=document.createElement("div");
+        tallo.className="tallo";
+
+        lirio.appendChild(flor);
+        lirio.appendChild(tallo);
+        contenedor.appendChild(lirio);
+
+        setTimeout(()=>{
+            flor.style.transform="scaleY(1)";
+            flor.style.opacity="1";
+        },i*400);
+    }
+
+    setTimeout(()=>{
+        document.querySelector(".delirio").style.opacity="1";
+    },3000);
+
+    setTimeout(()=>{
+        document.getElementById("btnLeer").style.display="block";
+    },4500);
+}
+
+document.getElementById("btnLeer").addEventListener("click",()=>{
+
+    pantalla2.classList.add("oculto");
+
+    setTimeout(()=>{
+        pantalla3.classList.remove("oculto");
+        setTimeout(()=>{
+            document.getElementById("carta").classList.add("activa");
+        },300);
+    },1200);
+});
+
+</script>
+
+</body>
+</html>
