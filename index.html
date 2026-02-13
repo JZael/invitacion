@@ -3,12 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invitación</title>
+<title>Invitación Especial</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
 body{
     overflow:hidden;
@@ -30,6 +34,11 @@ body{
     transition:opacity 1.5s ease;
 }
 
+.oculto{
+    opacity:0;
+    pointer-events:none;
+}
+
 /* BOTONES */
 button{
     margin-top:40px;
@@ -40,6 +49,12 @@ button{
     border-radius:8px;
     cursor:pointer;
     font-size:18px;
+    transition:0.3s;
+}
+
+button:hover{
+    background:white;
+    color:#7b1fa2;
 }
 
 /* PARTÍCULAS */
@@ -53,57 +68,35 @@ button{
     animation:caer linear infinite;
 }
 
+/* CORAZONES NEÓN */
+.corazon{
+    position:absolute;
+    font-size:24px;
+    color:white;
+    text-shadow:
+        0 0 5px #ff8cf0,
+        0 0 15px #d946ef,
+        0 0 30px #a21caf;
+    animation:caer linear infinite;
+}
+
+/* ANIMACIÓN CAÍDA */
 @keyframes caer{
-    from{transform:translateY(-10px);}
-    to{transform:translateY(100vh);}
-}
-
-/* LIRIOS */
-#lirios{
-    display:flex;
-    gap:40px;
-    align-items:flex-end;
-}
-
-.lirio{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-}
-
-.tallo{
-    width:6px;
-    height:120px;
-    background:#c084fc;
-    box-shadow:0 0 10px #a855f7;
-}
-
-.flor{
-    width:60px;
-    height:80px;
-    background:white;
-    border:3px solid #b57aff;
-    border-radius:50% 50% 40% 40%;
-    box-shadow:
-        0 0 10px #c084fc,
-        0 0 25px #a855f7,
-        0 0 50px #9333ea;
-    transform:scaleY(0);
-    transform-origin:bottom;
-    opacity:0;
-    transition:transform 2.5s ease, opacity 2s;
+    from{transform:translateY(-10vh);}
+    to{transform:translateY(110vh);}
 }
 
 /* TEXTO DELIRIO */
 .delirio{
     font-family:'Great Vibes',cursive;
-    font-size:38px;
+    font-size:42px;
     margin-top:40px;
     opacity:0;
+    text-align:center;
     text-shadow:
-        0 0 5px #c084fc,
-        0 0 15px #a855f7,
-        0 0 30px #9333ea;
+        0 0 5px #ff8cf0,
+        0 0 15px #d946ef,
+        0 0 30px #a21caf;
     transition:opacity 2s ease;
 }
 
@@ -120,6 +113,7 @@ button{
     height:20px;
     background:#c8a97e;
     border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.4);
 }
 
 .carta{
@@ -132,16 +126,12 @@ button{
     padding:0 20px;
     transition:max-height 2.5s ease,padding 1s ease;
     text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
 }
 
 .carta.activa{
     max-height:800px;
     padding:20px;
-}
-
-.oculto{
-    opacity:0;
-    pointer-events:none;
 }
 </style>
 </head>
@@ -149,14 +139,13 @@ button{
 
 <!-- PANTALLA 1 -->
 <div class="pantalla" id="pantalla1">
-    <h1 style="text-align:center;">Con mucho amor te hago presente esta invitación</h1>
+    <h1>Con mucho amor te hago presente esta invitación</h1>
     <button id="btnInicio">Presióname</button>
 </div>
 
 <!-- PANTALLA 2 -->
 <div class="pantalla oculto" id="pantalla2">
-    <div id="lirios"></div>
-    <div class="delirio">Unos lirios para ti que eres mi delirio</div>
+    <div class="delirio">Unos corazones para ti que eres mi delirio</div>
     <button id="btnLeer" style="display:none;">Leer invitación</button>
 </div>
 
@@ -166,8 +155,8 @@ button{
         <div class="rodillo"></div>
         <div class="carta" id="carta">
             <p>
-            Mi amor...  
-            Esta no es solo una invitación, es un pequeño universo creado para ti.
+            Mi amor...<br><br>
+            Esta no es solo una invitación, es un pequeño universo creado para ti.<br><br>
             Quiero invitarte a compartir un momento especial,
             donde cada segundo sea un recuerdo hermoso.
             </p>
@@ -176,83 +165,11 @@ button{
     </div>
 </div>
 
-<audio id="musica" src="musica.mp3"></audio>
+<!-- AUDIO CORREGIDO -->
+<audio id="musica" preload="auto">
+  <source src="musica.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 
-/* PARTÍCULAS */
-for(let i=0;i<50;i++){
-    const p=document.createElement("div");
-    p.className="particula";
-    p.style.left=Math.random()*100+"vw";
-    p.style.animationDuration=(5+Math.random()*5)+"s";
-    p.style.opacity=Math.random();
-    document.body.appendChild(p);
-}
-
-/* TRANSICIONES */
-const pantalla1=document.getElementById("pantalla1");
-const pantalla2=document.getElementById("pantalla2");
-const pantalla3=document.getElementById("pantalla3");
-const musica=document.getElementById("musica");
-
-document.getElementById("btnInicio").addEventListener("click",()=>{
-
-    musica.play().catch(()=>{});
-
-    pantalla1.classList.add("oculto");
-
-    setTimeout(()=>{
-        pantalla2.classList.remove("oculto");
-        crearLirios();
-    },1200);
-});
-
-function crearLirios(){
-    const contenedor=document.getElementById("lirios");
-
-    for(let i=0;i<5;i++){
-        const lirio=document.createElement("div");
-        lirio.className="lirio";
-
-        const flor=document.createElement("div");
-        flor.className="flor";
-
-        const tallo=document.createElement("div");
-        tallo.className="tallo";
-
-        lirio.appendChild(flor);
-        lirio.appendChild(tallo);
-        contenedor.appendChild(lirio);
-
-        setTimeout(()=>{
-            flor.style.transform="scaleY(1)";
-            flor.style.opacity="1";
-        },i*400);
-    }
-
-    setTimeout(()=>{
-        document.querySelector(".delirio").style.opacity="1";
-    },3000);
-
-    setTimeout(()=>{
-        document.getElementById("btnLeer").style.display="block";
-    },4500);
-}
-
-document.getElementById("btnLeer").addEventListener("click",()=>{
-
-    pantalla2.classList.add("oculto");
-
-    setTimeout(()=>{
-        pantalla3.classList.remove("oculto");
-        setTimeout(()=>{
-            document.getElementById("carta").classList.add("activa");
-        },300);
-    },1200);
-});
-
-</script>
-
-</body>
-</html>
+/
